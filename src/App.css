@@ -59,3 +59,13 @@ div.dropZone {
 div.component {
   margin-top: 50px;
 }
+
+div.orders {
+  margin-top: 50px;
+  background-color: lightcyan;
+}
+
+span.subitem {
+  background-color: aliceblue;
+  display: inline-block;
+}

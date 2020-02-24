@@ -11,8 +11,11 @@ const cookies = new Cookies();
 const Products = () => {
   const [products, setProducts] = useState([]);
 
-  const url = "http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/getproducts";
-  const token = cookies.get("MYJWT");
+  const url =
+    "http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/getproducts";
+  // const token = cookies.get("MYJWT");
+  const token = localStorage.getItem("MYJWT");
+
   const fetchProducts = () => {
     axios({
       method: "get",
@@ -46,6 +49,7 @@ const Products = () => {
       <div className="component" key={index}>
         {product.productId ? (
           <img
+            alt=""
             src={`http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/getproducts/getimage/${product.productId}`}
           />
         ) : null}

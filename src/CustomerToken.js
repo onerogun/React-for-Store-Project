@@ -3,14 +3,16 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { withRouter } from "react-router-dom";
 
-function Token(props) {
+function CustomerToken(props) {
   setTimeout(() => {
-    props.history.push("/");
+    props.history.push(orderUrl);
   }, 3000);
 
+  const orderUrl = `/orders/${props.match.params.id}`;
+
   console.log("id: " + props.match.params.id);
-  const [myToken, setMyToken] = useState("");
-  const [cookies, setCookie] = useCookies([""]);
+  const [myCustToken, setMyCustToken] = useState("");
+  const [custCookies, setCustCookie] = useCookies([""]);
 
   useEffect(() => {
     fetchToken();
@@ -20,12 +22,13 @@ function Token(props) {
     axios
       .get(`http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/gettoken/${props.match.params.id}`)
       .then(response => {
-        setMyToken(response.data);
+        setMyCustToken(response.data);
+        console.log(response.data);
       });
   };
 
-  setCookie("MYJWT", myToken, { maxAge: 60 * 60 * 24 * 7 });
-  localStorage.setItem("MYJWT", myToken);
+  setCustCookie("CUSTJWT", myCustToken, { maxAge: 60 * 60 * 24 * 7 });
+  localStorage.setItem("CUSTJWT", myCustToken);
 
   return (
     <div className="container">
@@ -35,4 +38,4 @@ function Token(props) {
   );
 }
 
-export default withRouter(Token);
+export default withRouter(CustomerToken);

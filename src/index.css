@@ -96,29 +96,6 @@ li a:hover:not(.active) {
   color: white;
 }
 
-td,
-th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 10px;
-}
-
-.info,
-.required,
-span {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 5px;
-  margin: 5px;
-}
-
-tr:nth-child(even) {
-  background-color: #d11aff;
-}
-
-tr:nth-child(odd) {
-  background-color: #e60073;
-}
 
 .dropbtn {
   background-color: #e60073;
