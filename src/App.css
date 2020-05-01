@@ -1,10 +1,5 @@
 .App {
   text-align: center;
-  margin-top: 50px;
-}
-
-.hide {
-  visibility: hidden;
 }
 
 .App-logo {
@@ -40,32 +35,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-img {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 30%;
-}
-
-div.dropZone {
-  background-color: aquamarine;
-  text-align: center;
-  max-width: 400px;
-  display: inline-block;
-}
-
-div.component {
-  margin-top: 50px;
-}
-
-div.orders {
-  margin-top: 50px;
-  background-color: lightcyan;
-}
-
-span.subitem {
-  background-color: aliceblue;
-  display: inline-block;
 }

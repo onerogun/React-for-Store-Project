@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useCallback } from "react";
-import "./App.css";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { useDropzone } from "react-dropzone";
 import { Cookies } from "react-cookie";
 import axios from "axios";
+import { ServerContext } from "./ServerContext";
 
 const cookies = new Cookies();
 
@@ -10,18 +10,19 @@ const cookies = new Cookies();
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+  const [server, setServer] = useContext(ServerContext);
+  const url = `${server}/getproducts`;
 
-  const url =
-    "http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/getproducts";
   // const token = cookies.get("MYJWT");
+
   const token = localStorage.getItem("MYJWT");
 
   const fetchProducts = () => {
     axios({
       method: "get",
       url: url,
-      headers: { Authorization: "Bearer " + token }
-    }).then(response => {
+      headers: { Authorization: "Bearer " + token },
+    }).then((response) => {
       console.log(response);
       setProducts(response.data);
     });
@@ -50,7 +51,7 @@ const Products = () => {
         {product.productId ? (
           <img
             alt=""
-            src={`http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/getproducts/getimage/${product.productId}`}
+            src={`${server}/getproducts/getimage/${product.productId}`}
           />
         ) : null}
         <br />
@@ -65,11 +66,12 @@ const Products = () => {
 };
 
 function MyDropzone({ productId }) {
-  const onDrop = useCallback(acceptedFiles => {
+  const [server, setServer] = useContext(ServerContext);
+  const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
 
     console.log(file);
-    const token = cookies.get("MYJWT");
+    const token = localStorage.getItem("MYJWT");
     const formData = new FormData();
     formData.append("file", file);
     console.log(productId);
@@ -79,14 +81,14 @@ function MyDropzone({ productId }) {
 
     axios
       .post(
-        `http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/getproducts/saveimage/${productId}`,
+        `${server}/getproducts/saveimage/${productId}`,
         formData,
         {
           headers: {
             //     "X-XSRF-TOKEN": csrfToken,
             "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + token
-          }
+            Authorization: "Bearer " + token,
+          },
         }
       )
       .then(() => {
@@ -94,7 +96,7 @@ function MyDropzone({ productId }) {
         //      console.log(csrfToken);
         window.location.reload(true);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log("failed!!!");
         console.log(err);
       });

@@ -1,26 +1,29 @@
-import React, { useEffect, useState, Fragment } from "react";
-import "./App.css";
+import React, { useEffect, useState, Fragment, useContext } from "react";
 import { Cookies } from "react-cookie";
 import axios from "axios";
 import { useTable } from "react-table";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { ProductContext } from "./ProductSource/ProductContext";
+import { ServerContext } from "./ServerContext";
 
 const cookies = new Cookies();
 
-const Orders = props => {
+const Orders = (props) => {
   const [orders, setOrders] = useState([]);
+  const [server, setServer] = useContext(ServerContext);
+
 
   // const token = cookies.get("CUSTJWT");
   const token = localStorage.getItem("CUSTJWT");
-  const url = `http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/getorders/${props.match.params.id}`;
+  //const url = `http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/getorders/${props.match.params.id}`;
+  const url = `${server}/getorders/${props.match.params.id}`;
   console.log("tokentosend: " + token);
   console.log(url);
   const fetchOrders = () => {
     axios({
       method: "get",
       url: url,
-      headers: { Authorization: "Bearer " + token }
-    }).then(response => {
+      headers: { Authorization: "Bearer " + token },
+    }).then((response) => {
       console.log(response);
       setOrders(response.data);
     });
@@ -30,28 +33,42 @@ const Orders = props => {
     fetchOrders();
   }, []);
 
+  const [
+    products,
+    setProducts,
+    tokenFetched,
+    setTokenFetched,
+    customer,
+    setCustomer,
+  ] = useContext(ProductContext);
+  //const [tokenFetched, setTokenFetched] = useContext(CustomerContext);
+
+  useEffect(() => {
+    setTokenFetched(token);
+  }, []);
+
   const columns = [
     {
       Header: "Order Details",
       columns: [
         {
           Header: "Product Id",
-          accessor: "productId"
+          accessor: "productId",
         },
         {
-          Header: "Order Total",
-          accessor: "productName"
+          Header: "Product Name",
+          accessor: "productName",
         },
         {
           Header: "Product Price",
-          accessor: "price"
+          accessor: "price",
         },
         {
           Header: "Amount Ordered",
-          accessor: "quantity"
-        }
-      ]
-    }
+          accessor: "quantity",
+        },
+      ],
+    },
   ];
 
   const columns1 = [
@@ -60,59 +77,48 @@ const Orders = props => {
       columns: [
         {
           Header: "Order Id",
-          accessor: "orderId"
+          accessor: "orderId",
         },
         {
-          Header: "Order Total",
-          accessor: "orderTotal"
-        },
-        {
-          Header: "Order Time",
-          accessor: "timeOfOrder"
+          Header: "Product Name",
+          accessor: "orderTotal",
         },
         {
           Header: "Order Time",
-          accessor: "orders.orderItems"
-        }
-      ]
-    }
+          accessor: "timeOfOrder",
+        },
+        {
+          Header: "Order Time",
+          accessor: "orders.orderItems",
+        },
+      ],
+    },
   ];
 
   //<Table columns={columns} data={orders} />;
-  return orders.map((order, index) => {
-    return (
-      <div className="orders" key={index}>
-        <h2>
-          Order Id: {order.orderId}, Order Time: {order.timeOfOrder}
-        </h2>
-
-        <Fragment>
-          <Table columns={columns} data={order.orderItems} />
-        </Fragment>
-
-        <h3>Order Total : {order.orderTotal}</h3>
+  return (
+    <React.Fragment>
+      <div className="mr-auto ml-5">
+        <span>Logged in user: {customer.userName}</span>
       </div>
-    );
-  });
+      {orders.map((order, index) => {
+        return (
+          <div className="mt-5" key={index}>
+            <h2>
+              Order Id: {order.orderId}, Order Time: {order.timeOfOrder}
+            </h2>
+
+            <Fragment>
+              <Table columns={columns} data={order.orderItems} />
+            </Fragment>
+
+            <h3>Order Total : {order.orderTotal.toFixed(2)}</h3>
+          </div>
+        );
+      })}
+    </React.Fragment>
+  );
 };
-
-/*
- 
-*/
-/*  {order.orderItems.map((item, ind) => {
-          return (
-            <div key={ind}>
-              <p>
-                <span className="subitem">Product Id: {item.productId}</span>
-                <span className="subitem">Product Name: {item.productName}</span>
-                <span className="subitem">Price: {item.price}</span>
-                <span className="subitem">Amount Ordered: {item.quantity}</span>
-              </p>
-            </div>
-
-          );
-        })}
-        */
 
 function Table({ columns, data }) {
   // Use the state and functions returned from useTable to build your UI
@@ -121,18 +127,18 @@ function Table({ columns, data }) {
     getTableBodyProps,
     headerGroups,
     rows,
-    prepareRow
+    prepareRow,
   } = useTable({
     columns,
-    data
+    data,
   });
 
   return (
     <table className="table table-dark table-hover" {...getTableProps()}>
       <thead>
-        {headerGroups.map(headerGroup => (
+        {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
+            {headerGroup.headers.map((column) => (
               <th {...column.getHeaderProps()}>{column.render("Header")}</th>
             ))}
           </tr>
@@ -143,7 +149,7 @@ function Table({ columns, data }) {
           prepareRow(row);
           return (
             <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
+              {row.cells.map((cell) => {
                 return <td {...cell.getCellProps()}>{cell.render("Cell")}</td>;
               })}
             </tr>
