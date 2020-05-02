@@ -11,7 +11,6 @@ const Orders = (props) => {
   const [orders, setOrders] = useState([]);
   const [server, setServer] = useContext(ServerContext);
 
-
   // const token = cookies.get("CUSTJWT");
   const token = localStorage.getItem("CUSTJWT");
   //const url = `http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com/getorders/${props.match.params.id}`;
@@ -46,6 +45,27 @@ const Orders = (props) => {
   useEffect(() => {
     setTokenFetched(token);
   }, []);
+
+  const cancelOrder = (orderId) => {
+    const confirmed = window.confirm("Press OK to cancel this order");
+    if (confirmed === true) {
+      axios({
+        method: "delete",
+        url: `${server}/cancelorderreact/${props.match.params.id}/${orderId}`,
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then(() => {
+          {
+            window.alert("Order cancelled succesfully!");
+            window.location.reload();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          window.alert("Order could not be cancelled!");
+        });
+    }
+  };
 
   const columns = [
     {
@@ -113,6 +133,13 @@ const Orders = (props) => {
             </Fragment>
 
             <h3>Order Total : {order.orderTotal.toFixed(2)}</h3>
+            <button
+              type="button"
+              className="btn btn-danger text-uppercase"
+              onClick={() => cancelOrder(order.orderId)}
+            >
+              cancel order
+            </button>
           </div>
         );
       })}
