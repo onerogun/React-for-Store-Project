@@ -3,9 +3,7 @@ import React, { useState } from "react";
 export const ServerContext = React.createContext();
 
 export const ServerProvider = (props) => {
-  const [server, setServer] = useState(
-    "http://admin.2qn4ziu8xq.us-east-1.elasticbeanstalk.com"
-  );
+  const [server, setServer] = useState("http://localhost:5000");
 
   return (
     <ServerContext.Provider value={[server, setServer]}>

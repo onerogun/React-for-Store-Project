@@ -11,6 +11,7 @@ import ProductList from "./ProductSource/ProductList";
 import { ProductProvider } from "./ProductSource/ProductContext";
 import Navbar from "./Navbar";
 import { ServerProvider } from "./ServerContext";
+import CustomerInfo from "./CustomerInfo";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
                 <Route exact path="/" component={Products} />
                 <Route path="/products" component={ProductList} />
                 <Route path="/cart" component={CartDetails} />
+                <Route path="/customerinfo" component={CustomerInfo} />
                 <Route path="/orders/:id" component={Orders} />
                 <Route path="/getcustomertoken/:id" component={CustomerToken} />
                 <Route

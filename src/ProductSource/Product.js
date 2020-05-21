@@ -5,7 +5,6 @@ import { ServerContext } from "../ServerContext";
 
 const Product = (props) => {
   const [server, setServer] = useContext(ServerContext);
-  
 
   const [
     cart,

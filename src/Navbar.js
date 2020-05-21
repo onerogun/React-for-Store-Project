@@ -3,7 +3,7 @@ import { ServerContext } from "./ServerContext";
 
 function Navbar() {
   const [server, setServer] = useContext(ServerContext);
-  
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <a className="navbar-brand" href="/products">
@@ -45,6 +45,11 @@ function Navbar() {
           <li className="nav-item">
             <a className="nav-link" href={`${server}/orders`}>
               Customer
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/customerinfo">
+              Edit Customer Info
             </a>
           </li>
           <li className="nav-item">

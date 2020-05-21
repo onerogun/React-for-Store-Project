@@ -6,7 +6,6 @@ import { ServerContext } from "../ServerContext";
 
 function CustomerToken(props) {
   const [server, setServer] = useContext(ServerContext);
-  
 
   setTimeout(() => {
     props.history.push(orderUrl);
@@ -24,9 +23,7 @@ function CustomerToken(props) {
 
   const fetchToken = () => {
     axios
-      .get(
-        `${server}/gettoken/${props.match.params.id}`
-      )
+      .get(`${server}/gettoken/${props.match.params.id}`)
       .then((response) => {
         setMyCustToken(response.data);
         console.log(response.data);
@@ -39,7 +36,7 @@ function CustomerToken(props) {
   return (
     <div className="container">
       <h3 className="center">Loading...</h3>
-      <div class="spinner-border text-secondary"></div>
+      <div className="spinner-border text-secondary"></div>
     </div>
   );
 }
